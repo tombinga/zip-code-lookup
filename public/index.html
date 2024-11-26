@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Form with ZIP Code Validation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 50px;
+      }
+      .error {
+        color: red;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 5px;
+        width: 80%;
+        max-width: 500px;
+        position: relative;
+      }
+
+      .close {
+        position: absolute;
+        right: 10px;
+        top: 5px;
+        font-size: 24px;
+        cursor: pointer;
+      }
+
+      .close:hover {
+        color: #666;
+      }
+
+      .success-message {
+        color: #28a745;
+      }
+
+      .error-message {
+        color: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Contact Us</h1>
+    <form id="contactForm" action="/submit" method="POST">
+      <div class="form-group">
+        <label for="name">Name:</label><br />
+        <input type="text" id="name" name="name" required />
+        <span id="nameError" class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label><br />
+        <input type="email" id="email" name="email" required />
+        <span id="emailError" class="error"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="zipcode">ZIP Code:</label><br />
+        <input
+          type="text"
+          id="zipcode"
+          name="zipcode"
+          placeholder="e.g., 12345 or 12345-6789"
+          required
+        />
+        <span id="zipcodeError" class="error"></span>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <!-- Modal -->
+    <div id="responseModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="modalMessage"></p>
+      </div>
+    </div>
+
+    <script>
+      // Get modal elements
+      const modal = document.getElementById("responseModal");
+      const modalMessage = document.getElementById("modalMessage");
+      const closeBtn = document.getElementsByClassName("close")[0];
+
+      // Close modal when clicking the close button
+      closeBtn.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      // Close modal when clicking outside of it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+
+      // Show modal with message
+      function showModal(message, success) {
+        modalMessage.textContent = message;
+        modalMessage.className = success ? "success-message" : "error-message";
+        modal.style.display = "block";
+      }
+
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault(); // Always prevent default form submission
+          let valid = true;
+
+          // Clear previous errors
+          document.getElementById("nameError").textContent = "";
+          document.getElementById("emailError").textContent = "";
+          document.getElementById("zipcodeError").textContent = "";
+
+          // Validate Name
+          const name = document.getElementById("name").value.trim();
+          if (name === "") {
+            document.getElementById("nameError").textContent =
+              "Name is required.";
+            valid = false;
+          }
+
+          // Validate Email
+          const email = document.getElementById("email").value.trim();
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            document.getElementById("emailError").textContent =
+              "Please enter a valid email address.";
+            valid = false;
+          }
+
+          // Validate ZIP Code
+          const zip = document.getElementById("zipcode").value.trim();
+          const zipRegex = /^\d{5}(-\d{4})?$/;
+          if (!zipRegex.test(zip)) {
+            document.getElementById("zipcodeError").textContent =
+              "Please enter a valid 5-digit ZIP code.";
+            valid = false;
+          }
+
+          if (valid) {
+            // Submit form data via fetch
+            const formData = new FormData(this);
+            fetch("/submit", {
+              method: "POST",
+              body: new URLSearchParams(formData),
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                showModal(data.message, data.success);
+                if (data.success) {
+                  // Clear form on success
+                  this.reset();
+                }
+              })
+              .catch((error) => {
+                showModal(
+                  "An error occurred while processing your request.",
+                  false
+                );
+              });
+          }
+        });
+    </script>
+  </body>
+</html>
