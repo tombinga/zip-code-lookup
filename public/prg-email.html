@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Signup</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .modal.show {
+        display: block;
+      }
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <form
+        action="https://cloud.info.patinarestaurantgroup.com/profile"
+        name="subscribeForm"
+        method="post"
+        id="SFMC_Form"
+      >
+        <input type="hidden" name="page" value="1" />
+        <input type="hidden" name="restaurant" value="NPPD" />
+        <input type="hidden" name="source" value="Web Signup" />
+        <input
+          type="hidden"
+          name="thanks"
+          value="https://www.patinagroup.com/naples-ristorante-e-bar/email-subscribe/thank-you"
+        />
+        <div class="form-group">
+          <label for="email">Email*</label>
+          <input
+            id="email"
+            class="form-control"
+            type="text"
+            name="email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="firstName">First Name*</label>
+          <input
+            id="firstName"
+            class="form-control"
+            type="text"
+            name="first_name"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name*</label>
+          <input
+            id="lastName"
+            class="form-control"
+            type="text"
+            name="last_name"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="postalCode">Postal Code*</label>
+          <input
+            id="postalCode"
+            class="form-control"
+            type="text"
+            name="zipcode"
+            required
+          />
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="email_optin" value="TRUE" required />
+            I consent to receiving email communications from Patina Restaurant
+            Group as stated in these
+            <a href="https://www.patinagroup.com/privacy-policy" target="_blank"
+              >terms</a
+            >
+          </label>
+        </div>
+        <button type="submit" class="btn btn-default btn-block btn-primary">
+          Submit
+        </button>
+      </form>
+    </div>
+
+    <!-- Add the form validator script -->
+    <script src="form-validator.js"></script>
+  </body>
+</html>
