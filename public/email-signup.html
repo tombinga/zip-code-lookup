@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patina Restaurant Group - Email Signup</title>
+    <style>
+      :root {
+        --primary-color: #b8860b;
+        --error-color: #f44336;
+        --text-color: #333;
+        --border-radius: 4px;
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: #f9f9f9;
+        padding: 20px;
+      }
+
+      form {
+        max-width: 500px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #555;
+      }
+
+      input[type="text"],
+      input[type="email"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: var(--border-radius);
+        font-size: 16px;
+        transition: var(--transition);
+      }
+
+      input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.2);
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .checkbox-group input[type="checkbox"] {
+        margin-top: 4px;
+      }
+
+      .checkbox-group label {
+        font-size: 14px;
+        font-weight: normal;
+      }
+
+      .checkbox-group a {
+        color: var(--primary-color);
+        text-decoration: none;
+      }
+
+      .checkbox-group a:hover {
+        text-decoration: underline;
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: var(--border-radius);
+        font-size: 16px;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+      }
+
+      button:hover {
+        background-color: #986c0c;
+      }
+
+      button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+
+      .error {
+        color: var(--error-color);
+        font-size: 14px;
+        margin-top: 5px;
+        display: none;
+      }
+
+      /* Loading spinner */
+      .spinner {
+        display: none;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      @keyframes spin {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      .has-validation {
+        /* Modal styles */
+        .modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+          opacity: 1;
+        }
+
+        .modal-content {
+          background-color: white;
+          margin: 15% auto;
+          padding: 30px;
+          border-radius: var(--border-radius);
+          width: 90%;
+          max-width: 500px;
+          position: relative;
+          transform: translateY(-50px);
+          transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+          transform: translateY(0);
+        }
+
+        .close {
+          position: absolute;
+          right: 20px;
+          top: 15px;
+          font-size: 28px;
+          font-weight: bold;
+          color: #aaa;
+          cursor: pointer;
+        }
+
+        .close:hover {
+          color: var(--text-color);
+        }
+
+        .validation-icon {
+          position: absolute;
+          right: 10px;
+          top: 40px;
+          display: none;
+        }
+
+        .validation-icon.valid::before {
+          content: "✓";
+          color: var(--primary-color);
+        }
+
+        .validation-icon.invalid::before {
+          content: "✗";
+          color: var(--error-color);
+        }
+      }
+
+      @media (max-width: 480px) {
+        form {
+          padding: 20px;
+          margin: 20px auto;
+        }
+
+        input {
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <form
+      action="https://cloud.info.patinarestaurantgroup.com/profile"
+      name="subscribeForm"
+      method="post"
+      id="SFMC_Form"
+    >
+      <input type="hidden" name="page" value="1" />
+      <input type="hidden" name="restaurant" value="MAPD" />
+      <input type="hidden" name="source" value="Web Signup" />
+      <input
+        type="hidden"
+        name="thanks"
+        value="https://www.morimotoasia.com/email-subscribe/thank-you"
+      />
+
+      <div class="form-group">
+        <label for="email">Email*</label>
+        <input type="email" id="email" name="email" required />
+        <span class="validation-icon"></span>
+        <div class="error" id="emailError"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="first_name">First Name*</label>
+        <input type="text" id="first_name" name="first_name" required />
+        <span class="validation-icon"></span>
+        <div class="error" id="first_nameError"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="last_name">Last Name*</label>
+        <input type="text" id="last_name" name="last_name" required />
+        <span class="validation-icon"></span>
+        <div class="error" id="last_nameError"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="zipcode">Postal Code*</label>
+        <input
+          type="text"
+          id="zipcode"
+          name="zipcode"
+          required
+          maxlength="10"
+        />
+        <span class="validation-icon"></span>
+        <div class="error" id="zipcodeError"></div>
+      </div>
+
+      <div class="checkbox-group">
+        <input
+          type="checkbox"
+          id="email_optin"
+          name="email_optin"
+          value="TRUE"
+          required
+        />
+        <label for="email_optin">
+          I consent to receiving email communications from Patina Restaurant
+          Group as stated in these
+          <a
+            href="https://www.patinagroup.com/privacy-policy"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            terms.
+          </a>
+        </label>
+      </div>
+
+      <button type="submit">
+        <span class="button-text">Submit</span>
+        <div class="spinner"></div>
+      </button>
+    </form>
+
+    <div id="validationModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="modalMessage"></p>
+      </div>
+    </div>
+
+    <script>
+      class ZipCodeValidator {
+        constructor() {
+          this.baseUrl = "https://api.zippopotam.us/us/";
+          this.cache = new Map();
+        }
+
+        async validate(zipCode) {
+          // Check cache first
+          if (this.cache.has(zipCode)) {
+            return this.cache.get(zipCode);
+          }
+
+          try {
+            const response = await fetch(`${this.baseUrl}${zipCode}`);
+
+            if (!response.ok) {
+              throw new Error("Invalid ZIP code");
+            }
+
+            const data = await response.json();
+            const result = {
+              valid: true,
+              city: data.places[0]["place name"],
+              state: data.places[0]["state abbreviation"],
+            };
+
+            // Cache the result
+            this.cache.set(zipCode, result);
+            return result;
+          } catch (error) {
+            return {
+              valid: false,
+              error: "Please enter a valid US ZIP code",
+            };
+          }
+        }
+      }
+
+      class FormValidator {
+        constructor(formId) {
+          this.form = document.getElementById(formId);
+          this.modal = document.getElementById("validationModal");
+          this.modalMessage = document.getElementById("modalMessage");
+          this.spinner = this.form.querySelector(".spinner");
+          this.buttonText = this.form.querySelector(".button-text");
+          this.zipValidator = new ZipCodeValidator();
+
+          this.validationRules = {
+            email: {
+              pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "Please enter a valid email address",
+            },
+            first_name: {
+              pattern: /^[a-zA-Z\s]{2,}$/,
+              message:
+                "Please enter a valid first name (at least 2 characters, letters only)",
+            },
+            last_name: {
+              pattern: /^[a-zA-Z\s]{2,}$/,
+              message:
+                "Please enter a valid last name (at least 2 characters, letters only)",
+            },
+            zipcode: {
+              pattern: /^\d{5}(-\d{4})?$/,
+              message:
+                "Please enter a valid ZIP code (e.g., 12345 or 12345-6789)",
+            },
+          };
+
+          this.setupEventListeners();
+          this.setupRealTimeValidation();
+        }
+
+        setupEventListeners() {
+          this.form.addEventListener("submit", (e) => this.handleSubmit(e));
+
+          // Modal close handlers
+          document
+            .querySelector(".close")
+            .addEventListener("click", () => this.closeModal());
+          window.addEventListener("click", (e) => {
+            if (e.target === this.modal) this.closeModal();
+          });
+        }
+
+        setupRealTimeValidation() {
+          Object.keys(this.validationRules).forEach((fieldName) => {
+            const input = this.form[fieldName];
+            const validationIcon =
+              input.parentElement.querySelector(".validation-icon");
+
+            input.addEventListener("input", () => {
+              const isValid = this.validateField(fieldName, input.value);
+              this.updateValidationUI(input, isValid);
+              validationIcon.style.display = "block";
+              validationIcon.className =
+                "validation-icon " + (isValid ? "valid" : "invalid");
+            });
+
+            input.addEventListener("focus", () => {
+              const errorElement = document.getElementById(`${fieldName}Error`);
+              errorElement.style.display = "block";
+              errorElement.textContent =
+                this.validationRules[fieldName].message;
+            });
+
+            input.addEventListener("blur", () => {
+              const isValid = this.validateField(fieldName, input.value);
+              if (isValid) {
+                document.getElementById(`${fieldName}Error`).style.display =
+                  "none";
+              }
+            });
+          });
+        }
+
+        validateField(fieldName, value) {
+          return this.validationRules[fieldName].pattern.test(value);
+        }
+
+        updateValidationUI(input, isValid) {
+          const errorElement = document.getElementById(`${input.name}Error`);
+          if (!isValid) {
+            errorElement.style.display = "block";
+            errorElement.textContent = this.validationRules[input.name].message;
+            input.style.borderColor = "var(--error-color)";
+          } else {
+            errorElement.style.display = "none";
+            input.style.borderColor = "var(--primary-color)";
+          }
+        }
+
+        async handleSubmit(e) {
+          e.preventDefault();
+
+          // Validate all fields
+          let isValid = true;
+          Object.keys(this.validationRules).forEach((fieldName) => {
+            const input = this.form[fieldName];
+            const fieldIsValid = this.validateField(fieldName, input.value);
+            this.updateValidationUI(input, fieldIsValid);
+            if (!fieldIsValid) isValid = false;
+          });
+
+          if (!isValid) return;
+
+          // Show loading state
+          this.setLoadingState(true);
+
+          try {
+            const zipCode = this.form.zipcode.value.substring(0, 5);
+
+            // Validate ZIP code with API
+            const zipValidation = await this.zipValidator.validate(zipCode);
+
+            if (zipValidation.valid) {
+              // Submit the form to SFMC
+              this.form.submit();
+            } else {
+              this.showModal(zipValidation.error, false);
+              this.setLoadingState(false);
+            }
+          } catch (error) {
+            this.showModal(
+              "An error occurred while validating your ZIP code. Please try again.",
+              false
+            );
+            this.setLoadingState(false);
+          }
+        }
+
+        setLoadingState(loading) {
+          this.spinner.style.display = loading ? "block" : "none";
+          this.buttonText.style.display = loading ? "none" : "block";
+          this.form.querySelector("button").disabled = loading;
+        }
+
+        showModal(message, success) {
+          this.modalMessage.textContent = message;
+          this.modalMessage.className = success
+            ? "success-message"
+            : "error-message";
+          this.modal.style.display = "block";
+          setTimeout(() => this.modal.classList.add("show"), 10);
+        }
+
+        closeModal() {
+          this.modal.classList.remove("show");
+          setTimeout(() => (this.modal.style.display = "none"), 300);
+        }
+      }
+
+      // Initialize form validator
+      new FormValidator("SFMC_Form");
+    </script>
+  </body>
+</html>
